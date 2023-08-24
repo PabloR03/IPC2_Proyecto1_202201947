@@ -1,3 +1,6 @@
+#Importaciones
+import xml.etree.ElementTree as ET
+
 # Funcion 4 - Mostrar datos del estudiante
 def datosEstudiante():
     print("Nombre: Pablo Andres Rodriguez Lima")
@@ -13,7 +16,7 @@ def limpiarConsola():
 
 # Función que muestra el menú principal
 def menuPrincipal():
-    print("Bienvenido al sistema de ubicación para zonas públicas WIFI")
+    print("Bienvenido al Menu Principal")
     print("1. Cargar Archivo")
     print("2. Procesar Archivo")
     print("3. Escribir Archivo de Salida")
