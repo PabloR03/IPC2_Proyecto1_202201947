@@ -6,16 +6,16 @@ Carcel:                          Senal
 - nombre                            nombre
 - niveles                           t
 - celdas_por nivel                  A
-- lista_de_celdas  (Celdas)         lista_de_datos (dato)
+- lista_de_celdas  (Celdas)         lista_de_datos (datos)
     -insertar                           insertar
     -recorrer                           recorrer
-- lista_de_patrones (Celdas)        lista_de_patrones (dato)
+- lista_de_patrones (Celdas)        lista_de_patrones (datos)
     -insertar                           insertar
     -recorrer                           recorrer
 
 
-Celda:                              Datos
+Celda:                              Dato
 - nivel                             t
 - numero_de_celda                   A
-- prisionero                        numero_tabla
+- prisionero                        "numero_en_tabla"
 '''

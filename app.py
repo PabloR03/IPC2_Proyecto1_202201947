@@ -1,6 +1,41 @@
 #Importaciones
 import xml.etree.ElementTree as ET
+from tkinter.filedialog import askopenfilename
+from senal import senal
+from dato import dato
+from lista_senales import lista_senales
+from lista_datos import lista_datos
 
+ruta = "prueba1.xml"
+
+try:
+    tree = ET.parse(ruta)
+    raiz = tree.getroot()
+    print("Archivo XML cargado correctamente")
+    lista_senales_temporal = lista_senales()
+    for senal_temporal in raiz.findall('senal'):
+        nombre_senal = senal_temporal.get('nombre')
+        t_senal = senal_temporal.get('t')
+        A_senal = senal_temporal.get('A')
+except ET.ParseError as e:
+    print("Error al analizar el archivo XML:", e)
+
+## Recupera el archivo XML
+#ruta = askopenfilename()
+#archivo = open(ruta, "r+")
+#archivo.close()
+#
+##Parsear para manipular el XML
+#tree = ET.parse(ruta)
+#raiz = tree.getroot()
+
+##Definimos la lista de señales
+#lista_senales_temporal = lista_senales()
+#for senal_temporal in raiz.findall('senal'):
+#    nombre_senal = senal_temporal.get('nombre')
+#    t_senal = senal_temporal.get('t')
+#    A_senal = senal_temporal.get('A')
+#    
 # Funcion 4 - Mostrar datos del estudiante
 def datosEstudiante():
     print("Nombre: Pablo Andres Rodriguez Lima")
