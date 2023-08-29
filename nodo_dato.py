@@ -1,5 +1,4 @@
-import dato as dato
 class nodo_dato:
-    def __init__(self,dato=None, siguiente=None):
-        self.dato=dato
-        self.siguiente=siguiente
+    def __init__(self, dato=None, siguiente=None):
+        self.dato = dato
+        self.siguiente = siguiente 
