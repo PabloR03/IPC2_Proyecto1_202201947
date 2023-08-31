@@ -1,47 +1,144 @@
 #Importaciones
 import xml.etree.ElementTree as ET
-from tkinter.filedialog import askopenfilename
+import tkinter as tk
+from tkinter import filedialog
 from senal import senal
-from lista_datos import lista_datos
-from lista_senales import lista_senales
-from lista_patrones import lista_patrones
-from lista_grupos import lista_grupos
+from lista_senales import lista_senal
 from dato import dato
-# Definir el XML
-lista_senaless=[]
-route = askopenfilename()
-archive = open(route,"r")
-archive.close()
-# Parsear el XML
-tree = ET.parse(route)
-root = tree.getroot()
-lista_senales_temporal=lista_senales()
-for senal_temporal in root.findall('senal'):
-    nombre_senal = senal_temporal.get('nombre')
-    ts = senal_temporal.get('t')
-    As = senal_temporal.get('A')
-    lista_datos_temporal = lista_datos()
-    lista_datos_patrones_temporal=lista_datos()
-    # Nuestras 2 listas nuevas, una para patrones y otra para los grupos
-    lista_patrones_temporal=lista_patrones()
-    lista_grupos_temporal=lista_grupos()
-    for dato_senal in senal_temporal.findall('dato'):
-        t = dato_senal.get('t')
-        A = dato_senal.get('A')
-        frecuencia = dato_senal.text
-        nuevo=dato(int(t),int(A),frecuencia)
-        lista_datos_temporal.insertar_dato_ordenado(nuevo)
-        # Inserción en mi lista de patrones celda:
-        if frecuencia!="0" and frecuencia!=" " and frecuencia!="NULL":
-            nuevo=dato(int(t),int(A),1)
-            lista_datos_patrones_temporal.insertar_dato_ordenado(nuevo)
+from lista_datos import lista_dato
+from lista_patrones import lista_patrones
+from lista_grupos import lista_grupo
+
+ruta_archivo = ""
+
+manejador_lista_senales = lista_senal()
+
+def modificar_ruta(nueva_ruta):
+    global ruta_archivo
+    ruta_archivo = nueva_ruta
+
+
+# Función 1 que muestra el menú de carga de archivo
+def cargar_archivo():
+    print("Selecciona el archivo XML que desea cargar:")
+    print("")
+    root = tk.Tk()
+    root.withdraw()
+    root.attributes('-topmost', True)
+    ruta_seleccionada = filedialog.askopenfilename()
+    if ruta_seleccionada:
+        ruta_archivo = ruta_seleccionada
+        modificar_ruta(ruta_archivo)
+    print("Archivo cargado correctamente.")
+    print("--------------------------------------")         
+    print("¿Desea realizar otra operación?")
+    print("1. Sí")
+    print("0. No")
+    try:
+        opcion = int(input("Ingrese Una Opción: "))
+        if opcion==1:
+            menuPrincipal()
+        elif opcion==0:
+            print("--------------------------------------------------")
+            print("Saliendo del Sistema")
+            print("--------------------------------------------------")
+            exit()
         else:
-            nuevo=dato(int(t),int(A),0)
-            lista_datos_patrones_temporal.insertar_dato_ordenado(nuevo)
-    lista_senales_temporal.insertar_dato(senal(nombre_senal,ts,As,lista_datos_temporal,lista_datos_patrones_temporal,lista_patrones_temporal,lista_grupos_temporal))
-# calculamos los patrones de esta carcel "Carcel De Seguridad"
-lista_senales_temporal.recorrer_e_imprimir_lista()
-lista_senales_temporal.calcular_los_patrones("Senal de patrones")
+            print("--------------------------------------------------")
+            print("Opción No Válida")
+            menuPrincipal()
+    except ValueError:
+        print("--------------------------------------------------")
+        print("Opción No Válida")
+        menuPrincipal()
+    print("--------------------------------------------------")
+
+# Función 2 que muestra el menú de procesar archivo
+def procesar_archivo():
+    print("")
+    if ruta_archivo=="":
+        print("ERROR: Seleccione un archivo para procesar.")
+    else:
+        try:
+            with open(ruta_archivo, "r") as archivo:
+                tree = ET.parse(ruta_archivo)
+                raiz=tree.getroot()
+                for senal_temporal in raiz.findall('senal'):
+                    nombre_senal=senal_temporal.get('nombre')
+                    tiempo_senal=senal_temporal.get('t')
+                    amplitud_senal=senal_temporal.get('A')
+                    #Listas
+                    manejador_lista_datos=lista_dato()
+                    manejador_lista_binaria=lista_dato()
+                    manejador_lista_patrones=lista_patrones()
+                    manejador_lista_grupos=lista_grupo()
+                    for dato_senal in senal_temporal.findall('dato'):
+                        ts=dato_senal.get('t')
+                        As=dato_senal.get('A')
+                        frecuencia=dato_senal.text
+                        nuevo_dato=dato(int(ts),int(As),int(frecuencia))
+                        manejador_lista_datos.insertar_dato(nuevo_dato)
+                        if frecuencia =="0" or frecuencia==" " or frecuencia=="NULL" or frecuencia=="" or frecuencia=="null" or frecuencia=="Null":
+                            nuevo_dato=dato(int(ts),int(As),0)
+                            manejador_lista_binaria.insertar_dato(nuevo_dato)
+                        else:
+                            nuevo_dato=dato(int(ts),int(As),1)
+                            manejador_lista_binaria.insertar_dato(nuevo_dato)
+                    manejador_lista_senales.insertar_senal(senal(nombre_senal,tiempo_senal,amplitud_senal,manejador_lista_datos,manejador_lista_binaria,manejador_lista_patrones,manejador_lista_grupos)) 
+                manejador_lista_senales.procesar_archivo()
+        except Exception as e:
+            print("ERROR:", e)
+    print("--------------------------------------")         
+    print("¿Desea realizar otra operación?")
+    print("1. Sí")
+    print("0. No")
+    print("--------------------------------------")
+    opcion = input("Ingrese Una Opción: ")
+    try:
+        if opcion==1:
+            menuPrincipal()
+        elif opcion==0:
+            print("--------------------------------------------------")
+            print("Saliendo del Sistema")
+            print("--------------------------------------------------")
+            exit()
+        else:
+            print("--------------------------------------------------")
+            print("Opción No Válida")
+            menuPrincipal()
+    except ValueError:
+        print("--------------------------------------------------")
+        print("Opción No Válida")
+        menuPrincipal()
+
+# Función 3 que muestra el menú de escribir archivo de salida en tipo XML
+def escribir_archivo_salida():
+    nombre_xml=input("Ingrese un nombre para guardar su archivo XML: ")
+    print("")
+    manejador_lista_senales.escribir_archivo_salida(nombre_xml)
+    print("--------------------------------------")         
+    print("¿Desea realizar otra operación?")
+    print("1. Sí")
+    print("2. No")
+    print("--------------------------------------")
+    opcion = input("Ingrese Una Opción: ")
+    try:
+        if opcion==1:
+            menuPrincipal()
+        elif opcion==0:
+            print("--------------------------------------------------")
+            print("Saliendo del Sistema")
+            print("--------------------------------------------------")
+            exit()
+        else:
+            print("--------------------------------------------------")
+            print("Opción No Válida")
+            menuPrincipal()
+    except ValueError:
+        print("--------------------------------------------------")
+        print("Opción No Válida")
+        menuPrincipal()
+
 # Funcion 4 - Mostrar datos del estudiante
 def datosEstudiante():
     print("Nombre: Pablo Andres Rodriguez Lima")
@@ -49,6 +146,85 @@ def datosEstudiante():
     print("Introduccion a la Programacion y Computacion 2 - Seccion D")
     print("Ingenieria en Ciencias y Sistemas")
     print("4to Semestre")
+    print("--------------------------------------------------")
+    print("¿Desea realizar otra operación?")
+    print("1. Sí")
+    print("2. No")
+    print("--------------------------------------")
+    opcion = input("Ingrese Una Opción: ")
+    try:
+        if opcion==1:
+            menuPrincipal()
+        elif opcion==0:
+            print("--------------------------------------------------")
+            print("Saliendo del Sistema")
+            print("--------------------------------------------------")
+            exit()
+        else:
+            print("--------------------------------------------------")
+            print("Opción No Válida")
+            menuPrincipal()
+    except ValueError:
+        print("--------------------------------------------------")
+        print("Opción No Válida")
+        menuPrincipal()
+
+# Funcion 5 - Generar grafica
+def generar_grafica():
+    nombre_senal=input("Ingrese nombre de la senal que decea graficar: ")
+    print("")
+    manejador_lista_senales.grafica_matrices(nombre_senal)
+    print("--------------------------------------")         
+    print("¿Desea realizar otra operación?")
+    print("1. Sí")
+    print("0. No")
+    print("--------------------------------------")
+    opcion = input("Ingrese Una Opción: ")
+    try:
+        if opcion==1:
+            menuPrincipal()
+        elif opcion==0:
+            print("--------------------------------------------------")
+            print("Saliendo del Sistema")
+            print("--------------------------------------------------")
+            exit()
+        else:
+            print("--------------------------------------------------")
+            print("Opción No Válida")
+            menuPrincipal()
+    except ValueError:
+        print("--------------------------------------------------")
+        print("Opción No Válida")
+        menuPrincipal()
+
+# Funcion 6 - Inicializar sistema
+def inicializar_sistema():
+    manejador_lista_senales.inicializar_sistema()
+    print("")
+    manejador_lista_senales.imprimir_senales()
+    modificar_ruta("")
+    print("--------------------------------------")         
+    print("¿Desea realizar otra operación?")
+    print("1. Sí")
+    print("0. No")
+    print("--------------------------------------")
+    opcion = input("Ingrese Una Opción: ")
+    try:
+        if opcion==1:
+            menuPrincipal()
+        elif opcion==0:
+            print("--------------------------------------------------")
+            print("Saliendo del Sistema")
+            print("--------------------------------------------------")
+            exit()
+        else:
+            print("--------------------------------------------------")
+            print("Opción No Válida")
+            menuPrincipal()
+    except ValueError:
+        print("--------------------------------------------------")
+        print("Opción No Válida")
+        menuPrincipal()
 
 # Función que limpia la consola
 def limpiarConsola():
@@ -74,58 +250,19 @@ while True:
     if opcion == "1":
         print("****************************************************************")
         print("\t \t Cargar Archivo")
-        route = askopenfilename()
-        archive = open(route,"r")
-        archive.close()
-        # Parsear el XML
-        tree = ET.parse(route)
-        root = tree.getroot()
+        cargar_archivo()
         print("****************************************************************")
     elif opcion == "2":
         print("****************************************************************")
         print("\t \t Procesar Archivo")
-        # Recorrer las señales y datos e imprimir atributos y valores
-        route = askopenfilename()
-        archive = open(route,"r")
-        archive.close()
-        # Parsear el XML
-        tree = ET.parse(route)
-        root = tree.getroot()
-        lista_senales_temporal=lista_senales()
-        for senal_temporal in root.findall('senal'):
-            nombre_senal = senal_temporal.get('nombre')
-            ts = senal_temporal.get('t')
-            As = senal_temporal.get('A')
-            lista_datos_temporal = lista_datos()
-            lista_datos_patrones_temporal=lista_datos()
-            # Nuestras 2 listas nuevas, una para patrones y otra para los grupos
-            lista_patrones_temporal=lista_patrones()
-            lista_grupos_temporal=lista_grupos()
-            for dato_senal in senal_temporal.findall('dato'):
-                t = dato_senal.get('t')
-                A = dato_senal.get('A')
-                frecuencia = dato_senal.text
-                nuevo=dato(int(t),int(A),frecuencia)
-                lista_datos_temporal.insertar_dato_ordenado(nuevo)
-                # Inserción en mi lista de patrones celda:
-                if frecuencia!="0" and frecuencia!=" " and frecuencia!="NULL":
-                    nuevo=dato(int(t),int(A),1)
-                    lista_datos_patrones_temporal.insertar_dato_ordenado(nuevo)
-                else:
-                    nuevo=dato(int(t),int(A),0)
-                    lista_datos_patrones_temporal.insertar_dato_ordenado(nuevo)
-            lista_senales_temporal.insertar_dato(senal(nombre_senal,ts,As,lista_datos_temporal,lista_datos_patrones_temporal,lista_patrones_temporal,lista_grupos_temporal))
-        # calculamos los patrones de esta carcel "Carcel De Seguridad"
-        lista_senales_temporal.recorrer_e_imprimir_lista()
-        lista_senales_temporal.calcular_los_patrones("Senal de patrones")
+        procesar_archivo()
         print("****************************************************************")
-
         limpiarConsola()
     elif opcion == "3":
         print("****************************************************************")
         print("\t \t Escribir Archivo de Salida")
         print("****************************************************************")
-
+        escribir_archivo_salida()
         limpiarConsola()
     elif opcion == "4":
         print("****************************************************************")
@@ -137,21 +274,23 @@ while True:
         print("****************************************************************")
         print("\t \t Generar Grafica")
         print("****************************************************************")
-
+        generar_grafica()
         limpiarConsola()
     elif opcion == "6":
         print("****************************************************************")
         print("\t \t Inicializar Sistema")
         print("****************************************************************")
-
+        inicializar_sistema()
         limpiarConsola()
     elif opcion == "7":
         print("****************************************************************")
         print("\t \t Esta Saliendo del Sistema")
         print("****************************************************************")
-
+        print("Saliendo del Sistema")
         limpiarConsola()
         break
     else:
         limpiarConsola()
         print("Error, opción no válida")
+
+

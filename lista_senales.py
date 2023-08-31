@@ -1,66 +1,171 @@
 from nodo_senal import nodo_senal
 from grupo import grupo
-class lista_senales:
+import xml.etree.ElementTree as ET
+
+def dividir_cadena_sumada(cadena, delimitador):
+    numeros = [] 
+    numero_actual = ""
+    for char in cadena:
+        if char == delimitador:
+            if numero_actual:
+                numeros.append(int(numero_actual))
+                numero_actual = ""
+        else:
+            numero_actual += char
+    if numero_actual:
+        numeros.append(int(numero_actual))
+    return numeros
+
+def dividir(cadena, delimitador):
+    resultado = []
+    inicio = 0
+    for i, caracter in enumerate(cadena):
+        if caracter == delimitador:
+            resultado.append(cadena[inicio:i])
+            inicio = i + 1
+    resultado.append(cadena[inicio:])
+    return resultado
+
+def sumar_grupos(cadena):
+    subcadenas = []
+    subcadena = ""
+    suma_total = None
+    for char in cadena:
+        if char != '%':
+            subcadena += char
+        else:
+            subcadenas.append(subcadena)
+            subcadena = ""
+    for subcadena in subcadenas:
+        valores=dividir(subcadena,"-")
+        if suma_total is None:
+            suma_total = valores
+        else:
+            for i in range(len(valores)):
+                if valores[i]:
+                    suma_total[i] = str(int(suma_total[i]) + int(valores[i]))
+    return "-".join(suma_total)
+
+class lista_senal:
     def __init__(self):
-        self.primero = None
-        self.contador_senales=0
-
-    def insertar_dato(self,senal):
+        self.primero=None
+        self.contador_senal=0
+        
+    def insertar_senal(self, senal):
         if self.primero is None:
-            self.primero = nodo_senal(senal=senal)
-            self.contador_senales+=1
+            self.primero=nodo_senal(senal=senal)
+            self.contador_senal+=1
             return
-        actual= self.primero
+        actual=self.primero
         while actual.siguiente:
-            actual = actual.siguiente
-        actual.siguiente = nodo_senal(senal=senal)
-        self.contador_senales+=1
-
-    def recorrer_e_imprimir_lista(self):
-        print("Total de senales almacaenadas: ",self.contador_senales)
-        print("")
-        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-        actual = self.primero
-        while actual != None:
-            print("Nombre:",actual.senal.nombres,"Tiempo (t):",actual.senal.ts," Amplitud (A):",actual.senal.As)
-            actual.senal.lista_datos.recorrer_e_imprimir_lista()
-            actual.senal.lista_patrones_datos.recorrer_e_imprimir_lista()
-            actual = actual.siguiente
-            print("")
-        print("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++")
-        print("")
-        print("")
-        print("")
-
-    def calcular_los_patrones(self,nombre_senal):
-        # recorremos la lista de carceles hasta encontrar una coincidencia
-        actual = self.primero
-        while actual != None:
-            # Si entra al if, es por que encontramos la carcel que queremos
-            if actual.senal.nombres==nombre_senal:
-                # Obtenemos sus patrones
-                actual.senal.lista_patrones_ts=actual.senal.lista_patrones_datos.devolver_patrones_por_ts(actual.senal.lista_patrones_ts)
-                # Imprimimos todos sus patrones
-                actual.senal.lista_patrones_ts.recorrer_e_imprimir_lista()
-                # obtenemos los grupos
-                lista_patrones_temporal=actual.senal.lista_patrones_ts
-                grupos_sin_analizar=lista_patrones_temporal.encontrar_coincidencias()
-                # Este es un string, por ejemplo "1,2--3,5--4"
-                print(grupos_sin_analizar)
-                # por cada grupo recorrer la matriz original e ir devolviendo las coordenadas especificadas
-                #recordando que por cada coincidencia encontrada, se va borrando para dejar solo las que no tienen grupo.
-                buffer=""
-                for digito in grupos_sin_analizar:
-                    if digito.isdigit() or digito==",":
-                        buffer+=digito
-                    elif digito =="-" and buffer!="":
-                        cadena_grupo=actual.senal.lista_datos.devolver_cadena_del_grupo(buffer)
-                        actual.senal.lista_grupos.insertar_dato(grupo=grupo(buffer,cadena_grupo))
-                        buffer=""
-                    else:
-                        buffer=""
-                actual.senal.lista_grupos.recorrer_e_imprimir_lista()
-                
-                return
             actual=actual.siguiente
-        print ("No se encontro la senal")
+        actual.siguiente=nodo_senal(senal=senal)
+        self.contador_senal+=1
+
+    def imprimir_senales(self):
+        print("Total de Señales:",self.contador_senal)
+        actual=self.primero
+        while actual !=None:
+            print("Nombre de senal cargada:",actual.senal.nombres)
+            actual=actual.siguiente
+
+    def grafica_matrices(self,nombres):
+        actual=self.primero
+        if actual is not None:
+            nombre_encontrado=False
+            while actual != None:
+                if actual.senal.nombres==nombres:
+                    nombre_encontrado=True
+                    break
+                else:
+                    actual=actual.siguiente
+            if nombre_encontrado:
+                print("Gráfica tabla original de la señal "+nombres+" almacenada correctamente.")
+                actual.senal.lista_dato.grafica_matriz_original(actual.senal.nombres,str(actual.senal.ts),str(actual.senal.As))
+                print("Gráfica matriz reducida de la señal "+nombres+" almacenada correctamente.")
+                actual.senal.lista_grupos.grafica_matriz_reducida(nombres)
+            else:
+                print("No existe una señal con el nombre: "+nombres)
+        else:
+            print("ERROR: No existen señales procesadas, intente cargar una de nuevo.")
+
+    def procesar_archivo(self):
+        actual=self.primero
+        while actual !=None:
+            nombre_senal=actual.senal.nombres
+            amplitud_senal=actual.senal.As
+            print("Procesando la Señal: "+actual.senal.nombres)
+            print("... Calculando la matriz de patrones (binaria) ...")
+            actual.senal.lista_patron=actual.senal.lista_binaria.patrones_por_tiempo(actual.senal.lista_patron)
+            lista_patrones_temporal=actual.senal.lista_patron
+            grupos_sin_analizar=lista_patrones_temporal.encontrar_coincidencias()
+            buffer=""
+            for digito in grupos_sin_analizar:
+                if digito.isdigit() or digito==".":
+                    buffer+=digito
+                elif digito =="-" and buffer!="":
+                    cadena_grupo=actual.senal.lista_dato.cadena_del_grupo(buffer)
+                    cadena_grupo_sumado=sumar_grupos(cadena_grupo)
+                    actual.senal.lista_grupos.insertar_grupo(grupo=grupo(nombre_senal,amplitud_senal,buffer,cadena_grupo,cadena_grupo_sumado))
+                    buffer=""
+                else:
+                    buffer=""
+            print("... Sumando frecuencias y almacenando grupos ...")
+            print("")
+            actual=actual.siguiente
+        print("Archivo procesado correctamente.")
+
+    def escribir_archivo_salida(self,nombre_xml):
+        actual=self.primero
+        if actual is not None:
+            senales=ET.Element("senalesReducidas")
+            while actual!=None:
+                senal=ET.SubElement(senales,"senal")
+                senal.set("nombre",actual.senal.nombres)
+                senal.set("A",actual.senal.As)
+                manejador_lista_grupo=actual.senal.lista_grupos.primero
+                contador_grupo=1
+                while  manejador_lista_grupo!=None:
+                    grupo=ET.SubElement(senal,"grupo")
+                    grupo.set("g",str(contador_grupo))
+                    contador_grupo+=1
+                    tiempos=ET.SubElement(grupo,"tiempos")
+                    tiempos.text= manejador_lista_grupo.grupo.nombre_grupo
+                    datos_grupo=ET.SubElement(grupo,"datosGrupo")
+                    cadena_digitos=dividir_cadena_sumada(manejador_lista_grupo.grupo.cadena_grupo_sumado,"-")
+                    contador_amplitud=1
+                    for i in cadena_digitos:
+                        dato=ET.SubElement(datos_grupo,"dato")
+                        dato.set("A",str(contador_amplitud))
+                        dato.text=str(i)
+                        contador_amplitud+=1
+                    manejador_lista_grupo=manejador_lista_grupo.siguiente
+                    contador_amplitud=1
+                actual=actual.siguiente
+                contador_grupo=1
+            datos=ET.tostring(senales)
+            datos=str(datos)
+            self.xml_identado(senales)
+            arbol_xml=ET.ElementTree(senales)
+            arbol_xml.write(nombre_xml+".xml",encoding="UTF-8",xml_declaration=True)
+            print("ARchivo XML generado y guardado correctamente.")
+        else:
+            print("ERROR: No existen señales procesadas.")
+
+    def xml_identado(self, element, indent='  '):
+        queue = [(0, element)]
+        while queue:
+            level, element = queue.pop(0)
+            children = [(level + 1, child) for child in list(element)]
+            if children:
+                element.text = '\n' + indent * (level + 1)
+            if queue:
+                element.tail = '\n' + indent * queue[0][0]
+            else:
+                element.tail = '\n' + indent * (level - 1)
+            queue[0:0] = children
+
+    def inicializar_sistema(self):
+        self.primero = None
+        self.contador_senal = 0
+        print("Se ha iniciado el programa correctamente.")

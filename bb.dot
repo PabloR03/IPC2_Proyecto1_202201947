@@ -1,0 +1,43 @@
+
+            digraph G {
+                subgraph cluster17
+                    {
+                    n019 ;
+                    n019 [label="Nombre Senal: Prueba 1"] ;
+                    n019 -> n020 ;
+                    n020 [label="Tiempo: 5"] ;
+                    n019 -> n021 ;
+                    n021 [label="Amplitud: 4"] ;
+                    }
+            label="Matriz de Onda Original"
+            fontname="Helvetica,Arial,sans-serif"
+            node [fontname="Helvetica,Arial,sans-serif"]
+            edge [fontname="Helvetica,Arial,sans-serif"]
+            a0 [shape=none  label=<
+            <TABLE border="0" cellspacing="10" cellpadding="10" >
+<TR><TD bgcolor="brown:purple"  gradientangle="315">2</TD>
+<TD bgcolor="brown:purple"  gradientangle="315">3</TD>
+<TD bgcolor="brown:purple"  gradientangle="315">0</TD>
+<TD bgcolor="brown:purple"  gradientangle="315">4</TD>
+</TR>
+<TR><TD bgcolor="brown:purple"  gradientangle="315">0</TD>
+<TD bgcolor="brown:purple"  gradientangle="315">0</TD>
+<TD bgcolor="brown:purple"  gradientangle="315">6</TD>
+<TD bgcolor="brown:purple"  gradientangle="315">3</TD>
+</TR>
+<TR><TD bgcolor="brown:purple"  gradientangle="315">3</TD>
+<TD bgcolor="brown:purple"  gradientangle="315">4</TD>
+<TD bgcolor="brown:purple"  gradientangle="315">0</TD>
+<TD bgcolor="brown:purple"  gradientangle="315">2</TD>
+</TR>
+<TR><TD bgcolor="brown:purple"  gradientangle="315">1</TD>
+<TD bgcolor="brown:purple"  gradientangle="315">0</TD>
+<TD bgcolor="brown:purple"  gradientangle="315">1</TD>
+<TD bgcolor="brown:purple"  gradientangle="315">5</TD>
+</TR>
+<TR><TD bgcolor="brown:purple"  gradientangle="315">0</TD>
+<TD bgcolor="brown:purple"  gradientangle="315">0</TD>
+<TD bgcolor="brown:purple"  gradientangle="315">3</TD>
+<TD bgcolor="brown:purple"  gradientangle="315">1</TD>
+ </TR></TABLE>>];
+                }
