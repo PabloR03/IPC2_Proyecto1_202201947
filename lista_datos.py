@@ -71,11 +71,13 @@ class lista_dato:
         return string_resultado
 
     def grafica_matriz_original(self,nombre,t,A):
-        f = open('bb.dot','w')
+        f = open('matriz.dot','w')
         text ="""
             digraph G {
+            bgcolor="red"
                 subgraph cluster17
                     {
+                    bgcolor="blue"
                     n019 ;
                     n019 [label="Nombre Senal: """+nombre+""""] ;
                     n019 -> n020 ;
@@ -84,9 +86,9 @@ class lista_dato:
                     n021 [label="Amplitud: """+A+""""] ;
                     }
             label="Matriz de Onda Original"
-            fontname="Helvetica,Arial,sans-serif"
-            node [fontname="Helvetica,Arial,sans-serif"]
-            edge [fontname="Helvetica,Arial,sans-serif"]
+            fontname="Arial,Arial,Arial"
+            node [fontname="Arial,Arial,Arial"]
+            edge [fontname="Arial,Arial,Arial"]
             a0 [shape=none  label=<
             <TABLE border="0" cellspacing="10" cellpadding="10" >\n"""
         actual = self.primero
@@ -100,14 +102,14 @@ class lista_dato:
             if fila_iniciada==False:
                 fila_iniciada=True
                 text+="""<TR>"""  
-                text+="""<TD bgcolor="brown:purple"  gradientangle="315">"""+str(actual.dato.frecuencia)+"""</TD>\n"""
+                text+="""<TD bgcolor="blue:red"  gradientangle="315">"""+str(actual.dato.frecuencia)+"""</TD>\n"""
             else:
-                text+="""<TD bgcolor="brown:purple"  gradientangle="315">"""+str(actual.dato.frecuencia)+"""</TD>\n"""
+                text+="""<TD bgcolor="blue:red"  gradientangle="315">"""+str(actual.dato.frecuencia)+"""</TD>\n"""
             actual = actual.siguiente
         text+=""" </TR></TABLE>>];
                 }\n"""
         f.write(text)
         f.close()
         os.environ["PATH"] += os.pathsep + 'C:/Program Files/Graphviz/bin'
-        os.system('dot -Tpng bb.dot -o grafica_matriz_original.png')
+        os.system('dot -Tpng matriz.dot -o grafica_matriz_original.png')
 

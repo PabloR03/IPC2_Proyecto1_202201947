@@ -30,28 +30,31 @@ def cargar_archivo():
         ruta_archivo = ruta_seleccionada
         modificar_ruta(ruta_archivo)
     print("Archivo cargado correctamente.")
-    print("--------------------------------------")         
+    print("")
+    print("")
+    print("----------------------------------------------------------------")         
     print("¿Desea realizar otra operación?")
     print("1. Sí")
     print("0. No")
     try:
-        opcion = int(input("Ingrese Una Opción: "))
-        if opcion==1:
-            menuPrincipal()
-        elif opcion==0:
-            print("--------------------------------------------------")
-            print("Saliendo del Sistema")
-            print("--------------------------------------------------")
+        d = int(input("Ingrese Una Opción: "))
+        if d==1:
+            print(" Regresando al menu principal...")
+            limpiarConsola()
+        elif d==0:
+            print("----------------------------------------------------------------")
+            print("\t \t Saliendo del Sistema")
+            print("----------------------------------------------------------------")
             exit()
         else:
-            print("--------------------------------------------------")
+            print("----------------------------------------------------------------")
             print("Opción No Válida")
-            menuPrincipal()
+            print("Volvera al menu principal")
     except ValueError:
-        print("--------------------------------------------------")
-        print("Opción No Válida")
-        menuPrincipal()
-    print("--------------------------------------------------")
+        print("----------------------------------------------------------------")
+        print("Opción Invalida")
+        print("Volvera al menu principal")
+
 
 # Función 2 que muestra el menú de procesar archivo
 def procesar_archivo():
@@ -88,56 +91,60 @@ def procesar_archivo():
                 manejador_lista_senales.procesar_archivo()
         except Exception as e:
             print("ERROR:", e)
-    print("--------------------------------------")         
+    print("")
+    print("")
+    print("----------------------------------------------------------------")         
     print("¿Desea realizar otra operación?")
     print("1. Sí")
     print("0. No")
-    print("--------------------------------------")
-    opcion = input("Ingrese Una Opción: ")
     try:
-        if opcion==1:
-            menuPrincipal()
-        elif opcion==0:
-            print("--------------------------------------------------")
-            print("Saliendo del Sistema")
-            print("--------------------------------------------------")
+        d = int(input("Ingrese Una Opción: "))
+        if d==1:
+            print(" Regresando al menu principal...")
+            limpiarConsola()
+        elif d==0:
+            print("----------------------------------------------------------------")
+            print("\t \t Saliendo del Sistema")
+            print("----------------------------------------------------------------")
             exit()
         else:
-            print("--------------------------------------------------")
+            print("----------------------------------------------------------------")
             print("Opción No Válida")
-            menuPrincipal()
+            print("Volvera al menu principal")
     except ValueError:
-        print("--------------------------------------------------")
-        print("Opción No Válida")
-        menuPrincipal()
+        print("----------------------------------------------------------------")
+        print("Opción Invalida")
+        print("Volvera al menu principal")
 
 # Función 3 que muestra el menú de escribir archivo de salida en tipo XML
 def escribir_archivo_salida():
     nombre_xml=input("Ingrese un nombre para guardar su archivo XML: ")
     print("")
     manejador_lista_senales.escribir_archivo_salida(nombre_xml)
-    print("--------------------------------------")         
+    print("")
+    print("")
+    print("----------------------------------------------------------------")         
     print("¿Desea realizar otra operación?")
     print("1. Sí")
-    print("2. No")
-    print("--------------------------------------")
-    opcion = input("Ingrese Una Opción: ")
+    print("0. No")
     try:
-        if opcion==1:
-            menuPrincipal()
-        elif opcion==0:
-            print("--------------------------------------------------")
-            print("Saliendo del Sistema")
-            print("--------------------------------------------------")
+        d = int(input("Ingrese Una Opción: "))
+        if d==1:
+            print(" Regresando al menu principal...")
+            limpiarConsola()
+        elif d==0:
+            print("----------------------------------------------------------------")
+            print("\t \t Saliendo del Sistema")
+            print("----------------------------------------------------------------")
             exit()
         else:
-            print("--------------------------------------------------")
+            print("----------------------------------------------------------------")
             print("Opción No Válida")
-            menuPrincipal()
+            print("Volvera al menu principal")
     except ValueError:
-        print("--------------------------------------------------")
-        print("Opción No Válida")
-        menuPrincipal()
+        print("----------------------------------------------------------------")
+        print("Opción Invalida")
+        print("Volvera al menu principal")
 
 # Funcion 4 - Mostrar datos del estudiante
 def datosEstudiante():
@@ -146,56 +153,60 @@ def datosEstudiante():
     print("Introduccion a la Programacion y Computacion 2 - Seccion D")
     print("Ingenieria en Ciencias y Sistemas")
     print("4to Semestre")
-    print("--------------------------------------------------")
+    print("")
+    print("")
+    print("----------------------------------------------------------------")         
     print("¿Desea realizar otra operación?")
     print("1. Sí")
-    print("2. No")
-    print("--------------------------------------")
-    opcion = input("Ingrese Una Opción: ")
+    print("0. No")
     try:
-        if opcion==1:
-            menuPrincipal()
-        elif opcion==0:
-            print("--------------------------------------------------")
-            print("Saliendo del Sistema")
-            print("--------------------------------------------------")
+        d = int(input("Ingrese Una Opción: "))
+        if d==1:
+            print(" Regresando al menu principal...")
+            limpiarConsola()
+        elif d==0:
+            print("----------------------------------------------------------------")
+            print("\t \t Saliendo del Sistema")
+            print("----------------------------------------------------------------")
             exit()
         else:
-            print("--------------------------------------------------")
+            print("----------------------------------------------------------------")
             print("Opción No Válida")
-            menuPrincipal()
+            print("Volvera al menu principal")
     except ValueError:
-        print("--------------------------------------------------")
-        print("Opción No Válida")
-        menuPrincipal()
+        print("----------------------------------------------------------------")
+        print("Opción Invalida")
+        print("Volvera al menu principal")
 
 # Funcion 5 - Generar grafica
 def generar_grafica():
     nombre_senal=input("Ingrese nombre de la senal que decea graficar: ")
     print("")
     manejador_lista_senales.grafica_matrices(nombre_senal)
-    print("--------------------------------------")         
+    print("")
+    print("")
+    print("----------------------------------------------------------------")         
     print("¿Desea realizar otra operación?")
     print("1. Sí")
     print("0. No")
-    print("--------------------------------------")
-    opcion = input("Ingrese Una Opción: ")
     try:
-        if opcion==1:
-            menuPrincipal()
-        elif opcion==0:
-            print("--------------------------------------------------")
-            print("Saliendo del Sistema")
-            print("--------------------------------------------------")
+        d = int(input("Ingrese Una Opción: "))
+        if d==1:
+            print(" Regresando al menu principal...")
+            limpiarConsola()
+        elif d==0:
+            print("----------------------------------------------------------------")
+            print("\t \t Saliendo del Sistema")
+            print("----------------------------------------------------------------")
             exit()
         else:
-            print("--------------------------------------------------")
+            print("----------------------------------------------------------------")
             print("Opción No Válida")
-            menuPrincipal()
+            print("Volvera al menu principal")
     except ValueError:
-        print("--------------------------------------------------")
-        print("Opción No Válida")
-        menuPrincipal()
+        print("----------------------------------------------------------------")
+        print("Opción Invalida")
+        print("Volvera al menu principal")
 
 # Funcion 6 - Inicializar sistema
 def inicializar_sistema():
@@ -203,28 +214,30 @@ def inicializar_sistema():
     print("")
     manejador_lista_senales.imprimir_senales()
     modificar_ruta("")
-    print("--------------------------------------")         
+    print("")
+    print("")
+    print("----------------------------------------------------------------")         
     print("¿Desea realizar otra operación?")
     print("1. Sí")
     print("0. No")
-    print("--------------------------------------")
-    opcion = input("Ingrese Una Opción: ")
     try:
-        if opcion==1:
-            menuPrincipal()
-        elif opcion==0:
-            print("--------------------------------------------------")
-            print("Saliendo del Sistema")
-            print("--------------------------------------------------")
+        d = int(input("Ingrese Una Opción: "))
+        if d==1:
+            print(" Regresando al menu principal...")
+            limpiarConsola()
+        elif d==0:
+            print("----------------------------------------------------------------")
+            print("\t \t Saliendo del Sistema")
+            print("----------------------------------------------------------------")
             exit()
         else:
-            print("--------------------------------------------------")
+            print("----------------------------------------------------------------")
             print("Opción No Válida")
-            menuPrincipal()
+            print("Volvera al menu principal")
     except ValueError:
-        print("--------------------------------------------------")
-        print("Opción No Válida")
-        menuPrincipal()
+        print("----------------------------------------------------------------")
+        print("Opción Invalida")
+        print("Volvera al menu principal")
 
 # Función que limpia la consola
 def limpiarConsola():
@@ -250,13 +263,14 @@ while True:
     if opcion == "1":
         print("****************************************************************")
         print("\t \t Cargar Archivo")
-        cargar_archivo()
         print("****************************************************************")
+        cargar_archivo()
+        limpiarConsola()
     elif opcion == "2":
         print("****************************************************************")
         print("\t \t Procesar Archivo")
-        procesar_archivo()
         print("****************************************************************")
+        procesar_archivo()
         limpiarConsola()
     elif opcion == "3":
         print("****************************************************************")

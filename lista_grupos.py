@@ -36,29 +36,31 @@ class lista_grupo:
 
     def grafica_matriz_reducida(self, nombre_senal):
         actual = self.primero
-        f = open('aa.dot','w')
+        f = open('reducida.dot','w')
         text ="""
             digraph G {
+            bgcolor="blue"
             subgraph cluster17
                     {
+                    bgcolor="lightgreen"
                     n019 ;
                     n019 [label="Nombre Senal Reducida: """+actual.grupo.nombre_senal+""""] ;
                     n019 -> n020 ;
                     n020 [label="Amplitud: """+actual.grupo.amplitud+""""] ;
                     }
             label="Matriz de Onda Reducida"
-            fontname="Helvetica,Arial,sans-serif"
-            node [fontname="Helvetica,Arial,sans-serif"]
-            edge [fontname="Helvetica,Arial,sans-serif"]
+            fontname="Arial,Arial,Arial"
+            node [fontname="Arial,Arial,Arial"]
+            edge [fontname="Arial,Arial,Arial"]
             a0 [shape=none  label=<
             <TABLE border="0" cellspacing="10" cellpadding="10" >\n"""
         while actual:
             if actual.grupo.nombre_senal == nombre_senal:
                 text+="""<TR>""" 
                 cadena_digitos=dividir_cadena_sumada(actual.grupo.cadena_grupo_sumado,"-")
-                text+="""<TD bgcolor="brown:purple"  gradientangle="315">"""+str(actual.grupo.nombre_grupo)+"""</TD>\n"""
+                text+="""<TD bgcolor="lightgreen"  gradientangle="315">"""+"Grupo: "+str(actual.grupo.nombre_grupo)+"""</TD>\n"""
                 for i in cadena_digitos:
-                    text+="""<TD bgcolor="red:blue"  gradientangle="315">"""+str(i)+"""</TD>\n"""
+                    text+="""<TD bgcolor="lightgreen:blue"  gradientangle="315">"""+str(i)+"""</TD>\n"""
                 text+="""</TR>\n"""
             actual = actual.siguiente
         text+="""</TABLE>>];
@@ -66,7 +68,7 @@ class lista_grupo:
         f.write(text)
         f.close()
         os.environ["PATH"] += os.pathsep + 'C:/Program Files/Graphviz/bin'
-        os.system('dot -Tpng aa.dot -o grafica_matriz_reducida.png')
+        os.system('dot -Tpng reducida.dot -o grafica_matriz_reducida.png')
 
     def imprimir_lista_grupo(self):
         print("-----------------------------------")
