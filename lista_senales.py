@@ -1,50 +1,64 @@
+from lista_simple import ListaEnlazada
 from nodo_senal import nodo_senal
 from grupo import grupo
 import xml.etree.ElementTree as ET
 
-def dividir_cadena_sumada(cadena, delimitador):
-    numeros = [] 
-    numero_actual = ""
+def dividir_cadena_grupo_sumado(cadena, delimitador):
+    numeros = ListaEnlazada()
+    dato_actual = ""
     for char in cadena:
         if char == delimitador:
-            if numero_actual:
-                numeros.append(int(numero_actual))
-                numero_actual = ""
+            if dato_actual:
+                numeros.agregar(dato_actual)
+                dato_actual = ""
         else:
-            numero_actual += char
-    if numero_actual:
-        numeros.append(int(numero_actual))
+            dato_actual += char
+    if dato_actual:
+        numeros.agregar(dato_actual)
     return numeros
 
-def dividir(cadena, delimitador):
-    resultado = []
-    inicio = 0
-    for i, caracter in enumerate(cadena):
-        if caracter == delimitador:
-            resultado.append(cadena[inicio:i])
-            inicio = i + 1
-    resultado.append(cadena[inicio:])
-    return resultado
+def split_personalizado(cadena, separador):
+    lista_resultado = ListaEnlazada()
+    palabra_actual = ""
+    for caracter in cadena:
+        if caracter == separador:
+            if palabra_actual:
+                lista_resultado.agregar(palabra_actual)
+                palabra_actual = ""
+        else:
+            palabra_actual += caracter
+    if palabra_actual:
+        lista_resultado.agregar(palabra_actual)
+    return lista_resultado
 
-def sumar_grupos(cadena):
-    subcadenas = []
-    subcadena = ""
+def procesar_cadena(cadena):
+    subcadenas = split_personalizado(cadena, "%")
+    nodo_actual = subcadenas.inicio
     suma_total = None
-    for char in cadena:
-        if char != '%':
-            subcadena += char
-        else:
-            subcadenas.append(subcadena)
-            subcadena = ""
-    for subcadena in subcadenas:
-        valores=dividir(subcadena,"-")
+    while nodo_actual:
+        valores = split_personalizado(nodo_actual.dato, "-")
+        nodo_actual1 = valores.inicio
         if suma_total is None:
-            suma_total = valores
+            suma_total = ListaEnlazada()
+            while nodo_actual1:
+                suma_total.agregar(nodo_actual1.dato)
+                nodo_actual1 = nodo_actual1.siguiente
         else:
-            for i in range(len(valores)):
-                if valores[i]:
-                    suma_total[i] = str(int(suma_total[i]) + int(valores[i]))
-    return "-".join(suma_total)
+            nodo_suma = suma_total.inicio
+            while nodo_actual1:
+                if nodo_suma:
+                    nodo_suma.dato = str(int(nodo_suma.dato) + int(nodo_actual1.dato))
+                    nodo_suma = nodo_suma.siguiente
+                    nodo_actual1 = nodo_actual1.siguiente
+        nodo_actual = nodo_actual.siguiente
+    resultado = ""
+    nodo_resultado = suma_total.inicio
+    while nodo_resultado:
+        resultado += nodo_resultado.dato
+        if nodo_resultado.siguiente:
+            resultado += "-"
+        nodo_resultado = nodo_resultado.siguiente
+    return resultado
 
 class lista_senal:
     def __init__(self):
@@ -105,7 +119,7 @@ class lista_senal:
                     buffer+=digito
                 elif digito =="-" and buffer!="":
                     cadena_grupo=actual.senal.lista_dato.cadena_del_grupo(buffer)
-                    cadena_grupo_sumado=sumar_grupos(cadena_grupo)
+                    cadena_grupo_sumado=procesar_cadena(cadena_grupo)
                     actual.senal.lista_grupos.insertar_grupo(grupo=grupo(nombre_senal,amplitud_senal,buffer,cadena_grupo,cadena_grupo_sumado))
                     buffer=""
                 else:
@@ -132,13 +146,15 @@ class lista_senal:
                     tiempos=ET.SubElement(grupo,"tiempos")
                     tiempos.text= manejador_lista_grupo.grupo.nombre_grupo
                     datos_grupo=ET.SubElement(grupo,"datosGrupo")
-                    cadena_digitos=dividir_cadena_sumada(manejador_lista_grupo.grupo.cadena_grupo_sumado,"-")
+                    numero_grupo=dividir_cadena_grupo_sumado(manejador_lista_grupo.grupo.cadena_grupo_sumado,"-")
+                    actual_numero=numero_grupo.inicio
                     contador_amplitud=1
-                    for i in cadena_digitos:
+                    while actual_numero:
                         dato=ET.SubElement(datos_grupo,"dato")
                         dato.set("A",str(contador_amplitud))
-                        dato.text=str(i)
+                        dato.text=actual_numero.dato
                         contador_amplitud+=1
+                        actual_numero=actual_numero.siguiente
                     manejador_lista_grupo=manejador_lista_grupo.siguiente
                     contador_amplitud=1
                 actual=actual.siguiente

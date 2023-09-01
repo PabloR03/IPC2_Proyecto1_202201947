@@ -1,0 +1,44 @@
+
+            digraph G {
+            bgcolor="red"
+                subgraph cluster17
+                    {
+                    bgcolor="blue"
+                    n019 ;
+                    n019 [label="Nombre Senal: Señal Gordita"] ;
+                    n019 -> n020 ;
+                    n020 [label="Tiempo: 3"] ;
+                    n019 -> n021 ;
+                    n021 [label="Amplitud: 7"] ;
+                    }
+            label="Matriz de Onda Original"
+            fontname="Arial,Arial,Arial"
+            node [fontname="Arial,Arial,Arial"]
+            edge [fontname="Arial,Arial,Arial"]
+            a0 [shape=none  label=<
+            <TABLE border="0" cellspacing="10" cellpadding="10" >
+<TR><TD bgcolor="blue:red"  gradientangle="315">3</TD>
+<TD bgcolor="blue:red"  gradientangle="315">5</TD>
+<TD bgcolor="blue:red"  gradientangle="315">4</TD>
+<TD bgcolor="blue:red"  gradientangle="315">4</TD>
+<TD bgcolor="blue:red"  gradientangle="315">9</TD>
+<TD bgcolor="blue:red"  gradientangle="315">1</TD>
+<TD bgcolor="blue:red"  gradientangle="315">6</TD>
+</TR>
+<TR><TD bgcolor="blue:red"  gradientangle="315">0</TD>
+<TD bgcolor="blue:red"  gradientangle="315">2</TD>
+<TD bgcolor="blue:red"  gradientangle="315">0</TD>
+<TD bgcolor="blue:red"  gradientangle="315">1</TD>
+<TD bgcolor="blue:red"  gradientangle="315">0</TD>
+<TD bgcolor="blue:red"  gradientangle="315">3</TD>
+<TD bgcolor="blue:red"  gradientangle="315">0</TD>
+</TR>
+<TR><TD bgcolor="blue:red"  gradientangle="315">4</TD>
+<TD bgcolor="blue:red"  gradientangle="315">5</TD>
+<TD bgcolor="blue:red"  gradientangle="315">6</TD>
+<TD bgcolor="blue:red"  gradientangle="315">9</TD>
+<TD bgcolor="blue:red"  gradientangle="315">8</TD>
+<TD bgcolor="blue:red"  gradientangle="315">1</TD>
+<TD bgcolor="blue:red"  gradientangle="315">1</TD>
+ </TR></TABLE>>];
+                }

@@ -3,19 +3,20 @@ import os
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as minidom
 from nodo_grupo import nodo_grupo
+from lista_simple import ListaEnlazada
 
-def dividir_cadena_sumada(cadena, delimitador):
-    numeros = [] 
-    numero_actual = ""
+def dividir_cadena_grupo_sumado(cadena, delimitador):
+    numeros = ListaEnlazada()
+    dato_actual = ""
     for char in cadena:
         if char == delimitador:
-            if numero_actual:
-                numeros.append(int(numero_actual))
-                numero_actual = ""
+            if dato_actual:
+                numeros.agregar(dato_actual)
+                dato_actual = ""
         else:
-            numero_actual += char
-    if numero_actual:
-        numeros.append(int(numero_actual))
+            dato_actual += char
+    if dato_actual:
+        numeros.agregar(dato_actual)
     return numeros
 
 class lista_grupo:
@@ -36,7 +37,7 @@ class lista_grupo:
 
     def grafica_matriz_reducida(self, nombre_senal):
         actual = self.primero
-        f = open('reducida.dot','w')
+        f = open('matrizreducida.dot','w')
         text ="""
             digraph G {
             bgcolor="blue"
@@ -57,10 +58,12 @@ class lista_grupo:
         while actual:
             if actual.grupo.nombre_senal == nombre_senal:
                 text+="""<TR>""" 
-                cadena_digitos=dividir_cadena_sumada(actual.grupo.cadena_grupo_sumado,"-")
+                numero_grupo=dividir_cadena_grupo_sumado(actual.grupo.cadena_grupo_sumado,"-")
+                actual_numero=numero_grupo.inicio
                 text+="""<TD bgcolor="lightgreen"  gradientangle="315">"""+"Grupo: "+str(actual.grupo.nombre_grupo)+"""</TD>\n"""
-                for i in cadena_digitos:
-                    text+="""<TD bgcolor="lightgreen:blue"  gradientangle="315">"""+str(i)+"""</TD>\n"""
+                while actual_numero:
+                    text+="""<TD bgcolor="lightgreen:blue"  gradientangle="315">"""+actual_numero.dato+"""</TD>\n"""
+                    actual_numero=actual_numero.siguiente
                 text+="""</TR>\n"""
             actual = actual.siguiente
         text+="""</TABLE>>];
@@ -68,7 +71,7 @@ class lista_grupo:
         f.write(text)
         f.close()
         os.environ["PATH"] += os.pathsep + 'C:/Program Files/Graphviz/bin'
-        os.system('dot -Tpng reducida.dot -o grafica_matriz_reducida.png')
+        os.system('dot -Tpng matrizreducida.dot -o grafica_matriz_agrupada.png')
 
     def imprimir_lista_grupo(self):
         print("-----------------------------------")
