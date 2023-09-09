@@ -1,0 +1,37 @@
+
+            digraph G {
+            bgcolor="blue"
+            subgraph cluster17
+                    {
+                    bgcolor="lightgreen"
+                    n019 ;
+                    n019 [label="Nombre Senal Reducida: testing"] ;
+                    n019 -> n020 ;
+                    n020 [label="Amplitud: 4"] ;
+                    }
+            label="Matriz de Onda Reducida"
+            fontname="Arial,Arial,Arial"
+            node [fontname="Arial,Arial,Arial"]
+            edge [fontname="Arial,Arial,Arial"]
+            a0 [shape=none  label=<
+            <TABLE border="0" cellspacing="10" cellpadding="10" >
+<TR><TD bgcolor="lightgreen"  gradientangle="315">Grupo: 1.</TD>
+<TD bgcolor="lightgreen:blue"  gradientangle="315">5</TD>
+<TD bgcolor="lightgreen:blue"  gradientangle="315">0</TD>
+<TD bgcolor="lightgreen:blue"  gradientangle="315">0</TD>
+<TD bgcolor="lightgreen:blue"  gradientangle="315">5</TD>
+</TR>
+<TR><TD bgcolor="lightgreen"  gradientangle="315">Grupo: 2.5.</TD>
+<TD bgcolor="lightgreen:blue"  gradientangle="315">10</TD>
+<TD bgcolor="lightgreen:blue"  gradientangle="315">0</TD>
+<TD bgcolor="lightgreen:blue"  gradientangle="315">0</TD>
+<TD bgcolor="lightgreen:blue"  gradientangle="315">0</TD>
+</TR>
+<TR><TD bgcolor="lightgreen"  gradientangle="315">Grupo: 3.4.</TD>
+<TD bgcolor="lightgreen:blue"  gradientangle="315">0</TD>
+<TD bgcolor="lightgreen:blue"  gradientangle="315">12</TD>
+<TD bgcolor="lightgreen:blue"  gradientangle="315">14</TD>
+<TD bgcolor="lightgreen:blue"  gradientangle="315">0</TD>
+</TR>
+</TABLE>>];
+                }
